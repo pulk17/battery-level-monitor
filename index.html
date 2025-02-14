@@ -9,6 +9,7 @@
         :root {
             --primary: #2dd4bf;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --text: #1f2937;
             --bg: #f8fafc;
             --card: #ffffff;
@@ -20,6 +21,7 @@
             padding: 20px;
             background-color: var(--bg);
             color: var(--text);
+            transition: background-color 0.5s ease;
         }
 
         .container {
@@ -176,6 +178,7 @@
             <div class="stat-card">
                 <h3>Power Rate</h3>
                 <div id="batterySpeed" class="stat-value">-- %/hr</div>
+                <p id="powerRateType" style="font-size: 0.9rem; opacity: 0.8;">--</p>
             </div>
             <div class="stat-card">
                 <h3>Battery Health</h3>
@@ -186,7 +189,6 @@
         <div class="card">
             <h2>Battery Tips</h2>
             <div id="batteryTips" class="tips">
-                <!-- Tips will be added dynamically -->
             </div>
         </div>
     </div>
@@ -283,6 +285,8 @@
                 
                 document.getElementById('batterySpeed').textContent = 
                     `${speed} %/hr`;
+                document.getElementById('powerRateType').textContent = 
+                    battery.charging ? 'Charge Rate' : 'Discharge Rate';
 
                 lastLevel = level;
                 lastTime = now;
@@ -297,7 +301,7 @@
                 health = "Check Charger";
                 healthColor = "#ef4444";
             } else if (battery.dischargingTime !== Infinity && battery.level === 1) {
-                const expectedDuration = 4 * 60 * 60; // 4 hours in seconds
+                const expectedDuration = 4 * 60 * 60; 
                 if (battery.dischargingTime < expectedDuration) {
                     health = "Degraded";
                     healthColor = "#f59e0b";
@@ -317,15 +321,25 @@
             document.getElementById('status').textContent = 
                 `Status: ${battery.charging ? 'Charging' : 'Discharging'}`;
 
+            // Update battery level color and background color based on level
+            let batteryColor = level <= 20 ? 'var(--danger)' : level <= 50 ? 'var(--warning)' : 'var(--primary)';
             batteryLevel.style.width = `${level}%`;
-            batteryLevel.style.backgroundColor = level <= 20 ? 'var(--danger)' : 'var(--primary)';
+            batteryLevel.style.backgroundColor = batteryColor;
 
+            // Update page background color based on battery level
+            document.body.style.backgroundColor = level <= 20 ? '#fee2e2' : level <= 50 ? '#fef3c7' : '#f0fdfa';
+
+            // Update time remaining
             const time = battery.charging ? battery.chargingTime : battery.dischargingTime;
             if (time !== Infinity) {
                 const hours = Math.floor(time / 3600);
                 const minutes = Math.floor((time % 3600) / 60);
                 document.getElementById('timeRemaining').textContent = 
                     `${hours}h ${minutes}m`;
+            } else if (battery.charging && battery.level === 1) {
+                document.getElementById('timeRemaining').textContent = 'Fully Charged';
+            } else {
+                document.getElementById('timeRemaining').textContent = '--:--';
             }
 
             calculateSpeed(battery, level);
