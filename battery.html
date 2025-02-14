@@ -3,251 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battery Monitor Pro</title>
-    <!-- Include required CDN libraries -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Battery Health Monitor</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --warning-color: #ffa700;
-            --danger-color: #ff4444;
-            --background-color: #f0f2f5;
-            --card-background: white;
-            --text-color: #333;
-            --grid-color: rgba(0, 0, 0, 0.1);
+            --primary: #2dd4bf;
+            --danger: #ef4444;
+            --text: #1f2937;
+            --bg: #f8fafc;
+            --card: #ffffff;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            transition: all 0.3s ease;
+            background-color: var(--bg);
+            color: var(--text);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 32px;
         }
 
-        .card {
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(45deg, var(--primary), #06b6d4);
+            -webkit-background-clip: text;
+            color: transparent;
         }
 
-        .battery-container {
+        .battery-display {
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
+            gap: 32px;
         }
 
-        .battery-icon {
-            width: 200px;
-            height: 100px;
-            border: 4px solid currentColor;
-            border-radius: 15px;
+        .battery {
+            width: 140px;
+            height: 70px;
+            border: 4px solid var(--primary);
+            border-radius: 12px;
             position: relative;
+            background: #f0fdfa;
         }
 
-        .battery-icon::after {
+        .battery::after {
             content: '';
             position: absolute;
-            width: 12px;
-            height: 30px;
-            background: currentColor;
+            width: 10px;
+            height: 20px;
+            background: var(--primary);
             top: 50%;
-            right: -16px;
+            right: -14px;
             transform: translateY(-50%);
             border-radius: 0 4px 4px 0;
         }
 
         .battery-level {
             height: 100%;
-            background-color: var(--primary-color);
+            background-color: var(--primary);
             transition: all 0.5s ease;
-            border-radius: 10px;
-            position: relative;
+            border-radius: 8px;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 24px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
+            background: linear-gradient(to bottom right, #f0fdfa, #ccfbf1);
             text-align: center;
-            transition: transform 0.3s ease;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 8px 0;
+            color: var(--primary);
         }
 
-        .graph-container {
-            position: relative;
-            height: 300px;
-            margin-top: 20px;
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            background: #333;
-            color: white;
-            transform: translateY(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .notification.show {
-            transform: translateY(0);
-        }
-
-        .advanced-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .advanced-stat {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
+        .tips {
+            padding: 16px;
             border-radius: 8px;
-            text-align: center;
+            background-color: #f0fdfa;
+            margin-top: 16px;
         }
 
-        /* Dark mode */
-        body.dark-mode {
-            --background-color: #1a1a1a;
-            --card-background: #2d2d2d;
-            --text-color: #fff;
-            --grid-color: rgba(255, 255, 255, 0.1);
+        .tip-item {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
         }
 
-        @media (max-width: 768px) {
+        .tip-item::before {
+            content: '•';
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            
+            .battery-display {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">
-        <i class="fas fa-moon"></i>
-    </button>
-
     <div class="container">
         <div class="header">
-            <h1>Battery Monitor Pro</h1>
+            <h1>Battery Health Monitor</h1>
         </div>
 
         <div class="card">
-            <div class="battery-container">
-                <div class="battery-icon">
-                    <div class="battery-level"></div>
+            <div class="battery-display">
+                <div class="battery">
+                    <div class="battery-level" id="batteryLevel"></div>
                 </div>
                 <div>
-                    <h2 id="percentage">---%</h2>
-                    <p id="status">Status: Unknown</p>
+                    <h2 id="percentage" style="font-size: 2.5rem; margin: 0;">---%</h2>
+                    <p id="status" style="font-size: 1.2rem; opacity: 0.8;">Status: Unknown</p>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2>Battery History</h2>
-            <div class="graph-container">
-                <canvas id="batteryChart"></canvas>
-            </div>
+            <h2>Battery Usage</h2>
+            <canvas id="batteryChart" height="200"></canvas>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <i class="fas fa-clock"></i>
-                <h3>Time Estimates</h3>
-                <p id="timeRemaining">Calculating...</p>
-                <p id="fullCharge">Time to full: N/A</p>
+                <h3>Time Remaining</h3>
+                <div id="timeRemaining" class="stat-value">--:--</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-bolt"></i>
-                <h3>Power Stats</h3>
-                <p id="chargingSpeed">Charging Speed: N/A</p>
-                <p id="dischargingSpeed">Discharge Rate: N/A</p>
+                <h3>Power Rate</h3>
+                <div id="batterySpeed" class="stat-value">-- %/hr</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-chart-line"></i>
-                <h3>Usage Metrics</h3>
-                <p id="cycleCount">Cycles: Calculating...</p>
-                <p id="healthStatus">Health: Checking...</p>
+                <h3>Battery Health</h3>
+                <div id="batteryHealth" class="stat-value">--</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>Advanced Statistics</h2>
-            <div class="advanced-stats">
-                <div class="advanced-stat">
-                    <h3>Average Discharge</h3>
-                    <p id="avgDischarge">Calculating...</p>
-                </div>
-                <div class="advanced-stat">
-                    <h3>Usage Time</h3>
-                    <p id="usageTime">0h 0m</p>
-                </div>
-                <div class="advanced-stat">
-                    <h3>Temperature</h3>
-                    <p id="temperature">N/A</p>
-                </div>
+            <h2>Battery Tips</h2>
+            <div id="batteryTips" class="tips">
+                <!-- Tips will be added dynamically -->
             </div>
         </div>
     </div>
 
-    <div class="notification" id="notification"></div>
-
     <script>
-        // Initialize variables
-        let batteryHistory = [];
         let chart;
-        let startTime = Date.now();
-        let lastLevel = 0;
-        let lastUpdateTime = Date.now();
-        let dischargeCycles = 0;
-        let totalDischargeRate = 0;
-        let dischargeReadings = 0;
+        let lastLevel = null;
+        let lastTime = null;
 
-        // Initialize Chart
-        function initChart() {
+        // Battery tips based on state
+        function updateBatteryTips(level, isCharging) {
+            const tipsElement = document.getElementById('batteryTips');
+            const tips = [];
+
+            if (level <= 20) {
+                tips.push('Low battery! Consider charging soon to avoid power loss');
+                tips.push('Close unnecessary background apps to conserve power');
+            } else if (level >= 80 && isCharging) {
+                tips.push('Battery is well charged. You can unplug to prevent stress on the battery');
+                tips.push('Keeping battery between 20-80% can extend its lifespan');
+            }
+
+            if (isCharging) {
+                tips.push('Avoid using device in high temperature conditions while charging');
+                tips.push('Using original charger helps maintain battery health');
+            } else {
+                tips.push('Enable power saving mode to extend battery life');
+                if (level < 50) {
+                    tips.push('Reduce screen brightness to save power');
+                }
+            }
+
+            tipsElement.innerHTML = tips.map(tip => `<div class="tip-item">${tip}</div>`).join('');
+        }
+
+        function setupChart() {
             const ctx = document.getElementById('batteryChart').getContext('2d');
             chart = new Chart(ctx, {
                 type: 'line',
@@ -256,14 +231,19 @@
                     datasets: [{
                         label: 'Battery Level',
                         data: [],
-                        borderColor: '#4CAF50',
+                        borderColor: '#2dd4bf',
+                        backgroundColor: '#ccfbf1',
                         tension: 0.4,
                         fill: true
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -274,11 +254,10 @@
             });
         }
 
-        // Update Chart
         function updateChart(level) {
             const time = new Date().toLocaleTimeString();
             
-            if (chart.data.labels.length > 50) {
+            if (chart.data.labels.length > 20) {
                 chart.data.labels.shift();
                 chart.data.datasets[0].data.shift();
             }
@@ -288,129 +267,86 @@
             chart.update();
         }
 
-        // Show Notification
-        function showNotification(message, duration = 3000) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, duration);
-        }
-
-        // Toggle Theme
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const icon = document.querySelector('.theme-toggle i');
-            icon.className = document.body.classList.contains('dark-mode') ? 
-                'fas fa-sun' : 'fas fa-moon';
-        }
-
-        // Calculate Statistics
-        function calculateStats(battery, level) {
+        function calculateSpeed(battery, level) {
             const now = Date.now();
-            const timeDiff = (now - lastUpdateTime) / 1000; // in seconds
-            const levelDiff = level - lastLevel;
+            
+            if (!lastLevel || !lastTime) {
+                lastLevel = level;
+                lastTime = now;
+                return;
+            }
 
-            // Calculate discharge rate
-            if (!battery.charging && timeDiff > 0) {
-                const hourlyRate = (levelDiff / timeDiff) * 3600;
-                if (hourlyRate < 0) {
-                    totalDischargeRate += Math.abs(hourlyRate);
-                    dischargeReadings++;
+            if (now - lastTime >= 5000) {
+                const hoursDiff = (now - lastTime) / 3600000;
+                const levelDiff = level - lastLevel;
+                const speed = Math.abs(levelDiff / hoursDiff).toFixed(1);
+                
+                document.getElementById('batterySpeed').textContent = 
+                    `${speed} %/hr`;
+
+                lastLevel = level;
+                lastTime = now;
+            }
+        }
+
+        function assessBatteryHealth(battery) {
+            let health = "Excellent";
+            let healthColor = "#2dd4bf";
+
+            if (battery.charging && battery.chargingTime === Infinity) {
+                health = "Check Charger";
+                healthColor = "#ef4444";
+            } else if (battery.dischargingTime !== Infinity && battery.level === 1) {
+                const expectedDuration = 4 * 60 * 60; // 4 hours in seconds
+                if (battery.dischargingTime < expectedDuration) {
+                    health = "Degraded";
+                    healthColor = "#f59e0b";
                 }
             }
 
-            // Update usage time
-            const usageHours = Math.floor((now - startTime) / 3600000);
-            const usageMinutes = Math.floor(((now - startTime) % 3600000) / 60000);
-            document.getElementById('usageTime').textContent = 
-                `${usageHours}h ${usageMinutes}m`;
-
-            // Update average discharge
-            if (dischargeReadings > 0) {
-                const avgDischarge = totalDischargeRate / dischargeReadings;
-                document.getElementById('avgDischarge').textContent = 
-                    `${avgDischarge.toFixed(2)}%/hr`;
-            }
-
-            // Simulate cycle count and health
-            dischargeCycles += battery.charging ? 0 : (Math.abs(levelDiff) / 100);
-            document.getElementById('cycleCount').textContent = 
-                `Cycles: ${Math.floor(dischargeCycles)}`;
-            
-            const simulatedHealth = Math.max(60, 100 - (Math.floor(dischargeCycles) * 0.1));
-            document.getElementById('healthStatus').textContent = 
-                `Health: ${simulatedHealth}%`;
-
-            // Update charging/discharging speed
-            if (battery.charging) {
-                document.getElementById('chargingSpeed').textContent = 
-                    `Charging Speed: ${(levelDiff / timeDiff * 3600).toFixed(1)}%/hr`;
-            } else {
-                document.getElementById('dischargingSpeed').textContent = 
-                    `Discharge Rate: ${Math.abs(levelDiff / timeDiff * 3600).toFixed(1)}%/hr`;
-            }
-
-            lastLevel = level;
-            lastUpdateTime = now;
+            const healthElement = document.getElementById('batteryHealth');
+            healthElement.textContent = health;
+            healthElement.style.color = healthColor;
         }
 
-        // Main Battery Update Function
         function updateBatteryUI(battery) {
             const level = Math.floor(battery.level * 100);
-            const batteryLevel = document.querySelector('.battery-level');
-            
-            // Update basic info
+            const batteryLevel = document.getElementById('batteryLevel');
+
             document.getElementById('percentage').textContent = `${level}%`;
             document.getElementById('status').textContent = 
                 `Status: ${battery.charging ? 'Charging' : 'Discharging'}`;
-            
-            // Update battery level
+
             batteryLevel.style.width = `${level}%`;
-            batteryLevel.style.backgroundColor = 
-                level <= 20 ? 'var(--danger-color)' : 
-                level <= 50 ? 'var(--warning-color)' : 
-                'var(--primary-color)';
+            batteryLevel.style.backgroundColor = level <= 20 ? 'var(--danger)' : 'var(--primary)';
 
-            // Update time estimates
-            const timeRemaining = battery.charging ? 
-                battery.chargingTime : battery.dischargingTime;
-            if (timeRemaining !== Infinity) {
-                const hours = Math.floor(timeRemaining / 3600);
-                const minutes = Math.floor((timeRemaining % 3600) / 60);
+            const time = battery.charging ? battery.chargingTime : battery.dischargingTime;
+            if (time !== Infinity) {
+                const hours = Math.floor(time / 3600);
+                const minutes = Math.floor((time % 3600) / 60);
                 document.getElementById('timeRemaining').textContent = 
-                    `${hours}h ${minutes}m remaining`;
+                    `${hours}h ${minutes}m`;
             }
 
-            // Update statistics
-            calculateStats(battery, level);
-            
-            // Update chart
+            calculateSpeed(battery, level);
             updateChart(level);
+            assessBatteryHealth(battery);
+            updateBatteryTips(level, battery.charging);
+        }
 
-            // Show notifications
-            if (level <= 15 && !battery.charging) {
-                showNotification('Low Battery! Please connect charger.');
+        document.addEventListener('DOMContentLoaded', () => {
+            if ('getBattery' in navigator) {
+                setupChart();
+                navigator.getBattery().then(battery => {
+                    updateBatteryUI(battery);
+
+                    ['levelchange', 'chargingchange', 'chargingtimechange', 'dischargingtimechange']
+                        .forEach(event => battery.addEventListener(event, () => updateBatteryUI(battery)));
+                });
+            } else {
+                alert('Battery API not supported on this device');
             }
-        }
-
-        // Initialize
-        if ('getBattery' in navigator) {
-            initChart();
-            navigator.getBattery().then(battery => {
-                updateBatteryUI(battery);
-                
-                // Add event listeners
-                battery.addEventListener('levelchange', () => updateBatteryUI(battery));
-                battery.addEventListener('chargingchange', () => updateBatteryUI(battery));
-                battery.addEventListener('chargingtimechange', () => updateBatteryUI(battery));
-                battery.addEventListener('dischargingtimechange', () => updateBatteryUI(battery));
-            });
-        } else {
-            showNotification('Battery API not supported on this device');
-        }
+        });
     </script>
 </body>
 </html>
