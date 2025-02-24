@@ -1,0 +1,650 @@
+:root {
+    /* Default Theme */
+    --primary: #2dd4bf;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --text: #1f2937;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --card-hover: rgba(0, 0, 0, 0.05);
+    --tips-bg: #f0fdfa;
+    --battery-bg: #f0fdfa;
+    --gradient-start: #f0fdfa;
+    --gradient-end: #ccfbf1;
+    
+    /* Dark Theme */
+    --dark-primary: #2dd4bf;
+    --dark-danger: #ef4444;
+    --dark-warning: #f59e0b;
+    --dark-text: #e5e7eb;
+    --dark-bg: #1a1a1a;
+    --dark-card: #2d2d2d;
+    --dark-card-hover: rgba(255, 255, 255, 0.05);
+    --dark-tips-bg: #1f1f1f;
+    --dark-battery-bg: #1f1f1f;
+    --dark-gradient-start: #2d2d2d;
+    --dark-gradient-end: #1f1f1f;
+    
+    /* Ocean Theme */
+    --ocean-primary: #06b6d4;
+    --ocean-danger: #e11d48;
+    --ocean-warning: #eab308;
+    --ocean-text: #1f2937;
+    --ocean-bg: #ecfeff;
+    --ocean-card: #ffffff;
+    --ocean-card-hover: rgba(6, 182, 212, 0.05);
+    --ocean-tips-bg: #cffafe;
+    --ocean-battery-bg: #cffafe;
+    --ocean-gradient-start: #ecfeff;
+    --ocean-gradient-end: #cffafe;
+    
+    /* Sunset Theme */
+    --sunset-primary: #f97316;
+    --sunset-danger: #dc2626;
+    --sunset-warning: #facc15;
+    --sunset-text: #1f2937;
+    --sunset-bg: #fff7ed;
+    --sunset-card: #ffffff;
+    --sunset-card-hover: rgba(249, 115, 22, 0.05);
+    --sunset-tips-bg: #fed7aa;
+    --sunset-battery-bg: #fed7aa;
+    --sunset-gradient-start: #fff7ed;
+    --sunset-gradient-end: #fed7aa;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Theme Switcher Styles */
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.battery-style-switcher {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.theme-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--primary);
+}
+
+.theme-btn:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Header Styles */
+.header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    background: linear-gradient(45deg, var(--primary), var(--ocean-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Card Styles */
+.card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    background-color: var(--card-hover);
+}
+
+/* Battery Display Styles */
+.battery-display {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.battery-container {
+    position: relative;
+    width: 140px;
+    height: 70px;
+}
+
+/* Battery Styles */
+.battery-default, .battery-rounded, .battery-minimal {
+    width: 140px;
+    height: 70px;
+    border: 4px solid var(--primary);
+    position: relative;
+    background: var(--battery-bg);
+    transition: all 0.3s ease;
+}
+
+.battery-default {
+    border-radius: 12px;
+}
+
+.battery-default::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 20px;
+    background: var(--primary);
+    top: 50%;
+    right: -14px;
+    transform: translateY(-50%);
+    border-radius: 0 4px 4px 0;
+}
+
+.battery-rounded {
+    border-radius: 35px;
+}
+
+.battery-rounded::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 30px;
+    background: var(--primary);
+    top: 50%;
+    right: -14px;
+    transform: translateY(-50%);
+    border-radius: 0 15px 15px 0;
+}
+
+.battery-minimal::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 40px;
+    background: var(--primary);
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+}
+
+.battery-level {
+    height: 100%;
+    transition: all 0.5s ease;
+    border-radius: inherit;
+}
+
+/* Stats Grid Styles */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.stat-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 8px 0;
+    color: var(--primary);
+}
+
+.percentage {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.status {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.power-rate-type {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Tips Styles */
+.tips {
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--tips-bg);
+}
+
+.tip-item {
+    margin: 8px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.tip-item::before {
+    content: '•';
+    color: var(--primary);
+    position: absolute;
+    left: 0;
+}
+
+/* Theme-specific styles */
+[data-theme="dark"] {
+    --primary: var(--dark-primary);
+    --danger: var(--dark-danger);
+    --warning: var(--dark-warning);
+    --text: var(--dark-text);
+    --bg: var(--dark-bg);
+    --card: var(--dark-card);
+    --card-hover: var(--dark-card-hover);
+    --tips-bg: var(--dark-tips-bg);
+    --battery-bg: var(--dark-battery-bg);
+    --gradient-start: var(--dark-gradient-start);
+    --gradient-end: var(--dark-gradient-end);
+}
+
+[data-theme="ocean"] {
+    --primary: var(--ocean-primary);
+    --danger: var(--ocean-danger);
+    --warning: var(--ocean-warning);
+    --text: var(--ocean-text);
+    --bg: var(--ocean-bg);
+    --card: var(--ocean-card);
+    --card-hover: var(--ocean-card-hover);
+    --tips-bg: var(--ocean-tips-bg);
+    --battery-bg: var(--ocean-battery-bg);
+    --gradient-start: var(--ocean-gradient-start);
+    --gradient-end: var(--ocean-gradient-end);
+}
+
+[data-theme="sunset"] {
+    --primary: var(--sunset-primary);
+    --danger: var(--sunset-danger);
+    --warning: var(--sunset-warning);
+    --text: var(--sunset-text);
+    --bg: var(--sunset-bg);
+    --card: var(--sunset-card);
+    --card-hover: var(--sunset-card-hover);
+    --tips-bg: var(--sunset-tips-bg);
+    --battery-bg: var(--sunset-battery-bg);
+    --gradient-start: var(--sunset-gradient-start);
+    --gradient-end: var(--sunset-gradient-end);
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+    
+    .theme-switcher {
+        position: static;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    
+    .battery-display {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .battery-style-switcher {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.age-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--card);
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-color: var(--primary);
+    color: white;
+}
+
+.settings-menu {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.settings-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    color: var(--text);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: var(--card);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-section {
+    margin-bottom: 1rem;
+}
+
+.dropdown-section h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.dropdown-section select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--primary);
+    background: var(--card);
+    color: var(--text);
+}
+
+/* Speedometer Styles */
+.speedometer-container {
+    text-align: center;
+    margin: 1rem auto;
+    position: relative;
+}
+
+.speedometer {
+    width: 180px;
+    height: 90px;
+    margin: 0 auto 20px;
+    background: var(--battery-bg);
+    border-radius: 90px 90px 0 0;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid var(--primary);
+    border-bottom: none;
+    transform: translateZ(0); 
+    backface-visibility: hidden; 
+}
+
+.speedometer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 90px 90px 0 0;
+    background: conic-gradient(
+        from 270deg at bottom, /* Start from the bottom center */
+        var(--danger) 0deg 27deg, /* Red zone */
+        var(--warning) 54deg 70deg, /* Yellow zone */
+        var(--primary) 90deg 180deg /* Green zone */
+    );
+    opacity: 0.3;
+}
+
+.speedometer::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--primary);
+    border-radius: 50%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 3px var(--battery-bg), 0 0 0 5px var(--primary);
+    z-index: 2;
+}
+
+.needle {
+    width: 4px;
+    height: 80px;
+    background: var(--text);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg); /* Start from the bottom center */
+    transform-origin: bottom center;
+    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+    border-radius: 4px 4px 0 0;
+}
+
+.needle::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--text);
+    border-radius: 50%;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.speedometer .ticks {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.speedometer .tick {
+    position: absolute;
+    width: 2px;
+    height: 8px;
+    background: var(--text);
+    opacity: 0.5;
+    top: 0;
+    left: 50%;
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(var(--tick-angle));
+}
+
+.speedometer .tick:nth-child(5n) {
+    height: 12px;
+    width: 3px;
+    opacity: 0.7;
+}
+
+/* Percentage display below speedometer */
+#speedometerPercentage {
+    font-size: 2.75rem;
+    font-weight: bold;
+    margin: 0.5rem 0 0.25rem;
+    color: var(--primary);
+}
+
+#speedometerStatus {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.8;
+}
+
+/* Speedometer Styles */
+.speedometer-container {
+    text-align: center;
+    margin: 1rem auto;
+    position: relative;
+}
+
+.speedometer {
+    width: 180px;
+    height: 90px;
+    margin: 0 auto 20px;
+    background: var(--battery-bg);
+    border-radius: 90px 90px 0 0;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid var(--primary);
+    border-bottom: none;
+    transform: translateZ(0); 
+    backface-visibility: hidden; 
+}
+
+.speedometer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 90px 90px 0 0;
+    background: conic-gradient(
+        from 270deg at bottom, /* Start from the bottom center */
+        var(--danger) 0deg 27deg, /* Red zone */
+        var(--warning) 54deg 70deg, /* Yellow zone */
+        var(--primary) 90deg 180deg /* Green zone */
+    );
+    opacity: 0.3;
+}
+
+.speedometer::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--primary);
+    border-radius: 50%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 3px var(--battery-bg), 0 0 0 5px var(--primary);
+    z-index: 2;
+}
+
+.needle {
+    width: 4px;
+    height: 80px;
+    background: var(--text);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg); /* Start from the bottom center */
+    transform-origin: bottom center;
+    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+    border-radius: 4px 4px 0 0;
+}
+
+.needle::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--text);
+    border-radius: 50%;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Percentage display below speedometer */
+#speedometerPercentage {
+    font-size: 2.75rem;
+    font-weight: bold;
+    margin: 0.5rem 0 0.25rem;
+    color: var(--primary);
+}
+
+#speedometerStatus {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.8;
+}
+
+/* Battery Level Animation */
+.battery-level {
+    transition: width 1s ease-in-out; /* Smooth animation for width changes */
+}
+
+/* Pulse Effect on Interaction */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.battery-container:active .battery-level {
+    animation: pulse 0.5s ease-in-out;
+}
